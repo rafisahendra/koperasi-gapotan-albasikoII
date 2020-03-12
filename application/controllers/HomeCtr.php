@@ -12,6 +12,7 @@ class HomeCtr extends CI_Controller {
 		$this->load->model("SimpanMd");
 		$this->load->model("PinjamMd");
 		$this->load->model("WithdrawMd");
+		$this->load->model("PerusahaanMd");
 		$this->load->library('form_validation');
 		$this->load->library('session');
 		
@@ -25,9 +26,11 @@ class HomeCtr extends CI_Controller {
 	{
 
 
-		// $data["count_barang"] = $this->AdminMd->get_barangCount(); //ambil data dari Models 
-		//$data["count_transaksi"] = $this->AdminMd->get_transaksiCount(); //ambil data dari Models 
-		$data["count_admin"] = $this->AdminMd->get_adminCount(); //ambil data dari Models 
+		$data["count_pinjam"] = $this->AdminMd->get_pinjamanCount(); //ambil data dari Models 
+		$data["count_simpanan"] = $this->AdminMd->get_simpanansiCount(); //ambil data dari Models 
+		$data["count_angsuran2"] = $this->AdminMd->get_angsuranCount2(); //ambil data dari Models 
+		$data["count_member"] = $this->AdminMd->get_memberCount(); //ambil data dari Models 
+		$data["count_angsuran"] = $this->AdminMd->get_angsuranCount(); //ambil data dari Models 
 		$this->load->view('beranda',$data);
 
 	}
@@ -87,17 +90,33 @@ class HomeCtr extends CI_Controller {
 		$this->load->view('output/simpananPokok',$data);
 	}
 
+	public function simpanan_pokok_detail_view($id_anggota, $id_kategori){
+		$data['detailSimpok'] = $this->SimpanMd->get_detailSimpananPokok($id_anggota, $id_kategori);
+		$this->load->view("output/simpananPokokDetail", $data);
+	}
+	
+
+	public function simpanan_wajib_detail_view($id_anggota, $id_kategori){
+		$data['detailWajib'] = $this->SimpanMd->get_detailSimpananWajib($id_anggota, $id_kategori);
+		$this->load->view("output/simpananWajibDetail", $data);
+	}
+
 	public function withdraw_view(){
 		$data['withdraw'] =$this->WithdrawMd->get_withdraw();
 		$this->load->view('output/withdraw',$data);
 	}
 
-	public function pinjaman_view()
-	{
-		$data['pinjam'] =$this->PinjamMd->get_pinjaman();
-		$this->load->view('output/pinjaman',$data);
-
+	public function witdraw_detail_view($id_anggota){
+		$data['detailwithdraw'] = $this->WithdrawMd->get_detailSimpananPokok($id_anggota);
+		$this->load->view("output/detail_withdraw", $data);
 	}
+
+	// public function pinjaman_view($id_pinjaman)
+	// {
+	// 	$data['pinjam'] =$this->PinjamMd->get_pinjaman($id_pinjaman);
+	// 	$this->load->view('output/pinjaman',$data);
+
+	// }
 
 	public function angsuran_view()
 	{
@@ -106,9 +125,18 @@ class HomeCtr extends CI_Controller {
 
 	}
 
+	public function keuangan_view(){
+		$data['keuangan']= $this->PerusahaanMd->get_keuangan();
+		$this->load->view('output/keuangan_perusahaan', $data);
+	}
+
 	public function angsuran_detail_view($id_pinjaman)
-	{
-		
+	{ 
+		$ifnull = $data['angsuran_ke'] = $this->PinjamMd->get_pembayaran_angsuran($id_pinjaman);
+		if($ifnull == null){
+			$this->PinjamMd->selesaiPinjaman($id_pinjaman);
+		}
+		$data['max_angsuran'] = $this->PinjamMd->get_max_cicilan($id_pinjaman);
 	    $data['dtpangsuran'] =$this->PinjamMd->get_detailPinjamanAngsuran($id_pinjaman);
 	    $data['dtangsuran'] =$this->PinjamMd->get_detailAngsuran($id_pinjaman);
 		$this->load->view('output/angsuran_detail',$data);
@@ -116,28 +144,7 @@ class HomeCtr extends CI_Controller {
 	}
 
 
-	public function perhari(){
-		$data['perhari'] = $this->TransaksiMd->get_laporan_perhari();
-		$data['tgl'] = $this->input->post('hari');
 
-		$this->load->view('output/perhari', $data);
-	}
-
-
-	public function perbulan(){
-		$data['perbulan'] = $this->TransaksiMd->get_laporan_perbulan();
-		$data['bulan'] = $this->input->post('bulan');
-		$this->load->view('output/perbulan', $data);
-
-	}
-
-
-	public function pertahun(){
-		$data['pertahun'] = $this->TransaksiMd->get_laporan_pertahun();
-		$data['thn'] = $this->input->post('tahun');
-
-		$this->load->view('output/pertahun', $data);
-	}
 
 
  
@@ -154,6 +161,10 @@ class HomeCtr extends CI_Controller {
 	{
 		$this->load->view('input/add-anggota');
 
+	}
+
+	public function keuangan_add(){
+		$this->load->view('input/add-keuangan');
 	}
 
 	public function simpanan_add()
@@ -177,6 +188,12 @@ class HomeCtr extends CI_Controller {
 		$data["kategori"] = $this->KategoriMd->get_kategori(); //ambil data dari Models 
 		$this->load->view('input/add-angsuran', $data);
 
+	}
+
+	public function bayar_angsuran_add($id_pinjaman){
+
+		$data['angsuran_ke'] = $this->PinjamMd->get_pembayaran_angsuran($id_pinjaman);
+		$this->load->view('input/add-pembayaran-angsuran', $data);
 	}
 
 	public function withdraw_add()
@@ -240,6 +257,45 @@ class HomeCtr extends CI_Controller {
 		redirect(site_url('HomeCtr/kategori_view'));
 	}
 
+	public function keuangan_save(){
+		$cek_data = $data['cek_data'] = $this->PerusahaanMd->get_keuanganCount();
+		
+		if($cek_data == 0){
+		$this->PerusahaanMd->add_keuangan();
+		$this->session->set_flashdata('success','<h6><i>Data Berhasil disimpan</i></h6>');
+		}else{
+
+			$ambil_data_sebelumnya = $data['keuangan'] = $this->PerusahaanMd->get_keuangan();
+			foreach ($ambil_data_sebelumnya as $dsebelumnya){
+			$debitSebelumnya =	$dsebelumnya->debit;
+			$kreditSebelumnya =  $dsebelumnya->kredit;
+			}
+
+			$debitBaru = $this->input->post('debit');
+			$kreditBaru = $this->input->post('kredit');
+			$debit  = $debitSebelumnya + $debitBaru ;
+			$kredit = $kreditSebelumnya+ $kreditBaru;
+
+			$this->PerusahaanMd->addup_keuanganlanjutan($debit, $kredit);
+
+		}
+
+		redirect('HomeCtr/keuangan_view');
+	}
+
+	public function angsuran_cicilan_save($id){
+
+		$ambil_data_sebelumnya = $data['keuangan'] = $this->PerusahaanMd->get_keuangan();
+			foreach ($ambil_data_sebelumnya as $dsebelumnya){
+			$debitSebelumnya =	$dsebelumnya->debit;
+			}
+			$debitBaru = $this->input->post('jumlah_bayar');
+			$debit = $debitSebelumnya + $debitBaru;
+			$this->PerusahaanMd->addup_keuanganAngsuran($debit);
+	   	    $this->PinjamMd->add_cicilan_bulanan();
+		$this->session->set_flashdata('success', '<h6><i>Data angsuran Perbulan berhasil </i></h6>');
+		redirect('HomeCtr/angsuran_detail_view/'.$id);
+	}
 	
 
 
@@ -293,7 +349,7 @@ class HomeCtr extends CI_Controller {
 
 	public function pinjaman_save()
 	{
-
+		$id_pinjaman = $this->input->post('id_peminjaman');
 
 		$id_anggota = $this->input->post('id_anggota');
 	
@@ -303,14 +359,35 @@ class HomeCtr extends CI_Controller {
 		endforeach;
 	
 		if(@$cek_ida == null){
-
+			// untuk update di tabel keuangan perusaahaan karena di ada peminjaman
+			$ambil_data_sebelumnya = $data['keuangan'] = $this->PerusahaanMd->get_keuangan();
+			foreach ($ambil_data_sebelumnya as $dsebelumnya){
+			$debitSebelumnya =	$dsebelumnya->debit;
+			}
+			$kreditBaru = $this->input->post('jumlah_pinjaman');
+			$debit = $debitSebelumnya - $kreditBaru;
+			$this->PerusahaanMd->addup_keuanganPinjaman($debit);
+			// insert di tabel Peminjaman dan insert tabel master keuangan
 			$this->PinjamMd->add_pinjam();
+
+			// insert ke tabel angsuran
 			$this->PinjamMd->add_angsuran();
 			$this->session->set_flashdata('success', 'Data Berhasil Disimpan');
 			
 
 		}elseif($cek_ida == 0){
+			// untuk update di tabel keuangan perusaahaan karena di ada peminjaman
+			$ambil_data_sebelumnya = $data['keuangan'] = $this->PerusahaanMd->get_keuangan();
+			foreach ($ambil_data_sebelumnya as $dsebelumnya){
+			$debitSebelumnya =	$dsebelumnya->debit;
+			}
+			$kreditBaru = $this->input->post('jumlah_pinjaman');
+			$debit = $debitSebelumnya - $kreditBaru;
+			$this->PerusahaanMd->addup_keuanganPinjaman($debit);
+
+			// insert di tabel Peminjaman saja
 			$this->PinjamMd->addup_pinjam();
+			// ambil data sebelmnya ntuk di update
 			$data1 = $this->PinjamMd->addup_pinjamByID($id_anggota);
 			
 			foreach($data1 as $d):
@@ -319,12 +396,23 @@ class HomeCtr extends CI_Controller {
 			
 			$dbaru = $this->input->post('jumlah_pinjaman');
 			$kredit = $dlama + $dbaru;
+			// data yg di ambil di update disini
 			$this->PinjamMd->addup_lanjutan_pnj($kredit,$id_anggota);
+			// insert ke tabel angsuran
 			$this->PinjamMd->add_angsuran();
 			$this->session->set_flashdata('success', 'Data Berhasil Disimpan');
 		}else{
-
+			// untuk update di tabel keuangan perusaahaan karena di ada peminjaman
+			$ambil_data_sebelumnya = $data['keuangan'] = $this->PerusahaanMd->get_keuangan();
+			foreach ($ambil_data_sebelumnya as $dsebelumnya){
+			$debitSebelumnya =	$dsebelumnya->debit;
+			}
+			$kreditBaru = $this->input->post('jumlah_pinjaman');
+			$debit = $debitSebelumnya - $kreditBaru;
+			$this->PerusahaanMd->addup_keuanganPinjaman($debit);
+        	// insert di tabel Peminjaman saja
 			$this->PinjamMd->addup_pinjam();
+			// ambil data sebelmnya ntuk di update
 			$data1 = $this->PinjamMd->addup_pinjamByID($id_anggota);
 			
 			foreach($data1 as $d):
@@ -333,13 +421,15 @@ class HomeCtr extends CI_Controller {
 			
 			$dbaru = $this->input->post('jumlah_pinjaman');
 			$kredit = $dlama + $dbaru;
+			// data yg di ambil di update disini
 			$this->PinjamMd->addup_lanjutan_pnj($kredit,$id_anggota);
+			// insert ke tabel angsuran
 			$this->PinjamMd->add_angsuran();
 			$this->session->set_flashdata('success', 'Data Berhasil Disimpan');
 		}
-
 		
-		redirect('HomeCtr/pinjaman_view');
+		
+		redirect('HomeCtr/angsuran_detail_view/'.$id_pinjaman);
 		
 	}
 	public function withdraw_save(){
@@ -393,7 +483,7 @@ class HomeCtr extends CI_Controller {
     
     
     
-		redirect(site_url('HomeCtr/withdraw_add'));
+		redirect(site_url('HomeCtr/withdraw_view'));
 	}
 
 
@@ -427,15 +517,20 @@ class HomeCtr extends CI_Controller {
 	}
 
 
-	public function penyimpanan_del($id=null)
+	public function simwajib_del($id, $idm , $idk)
     {
-        if (!isset($id)) show_404();
-        
-        if ($this->SimpanMd->del_simpan($id)) {
-            redirect(site_url('HomeCtr/simpanan_view'));
-		}
+      
+           $this->SimpanMd->del_simpan($id);
+            redirect(site_url('HomeCtr/Simpanan_wajib_detail_view/'.$idm.'/'.$idk));
+		
 	}
 
+	public function simpokok_del($id, $idm , $idk)
+    {   
+        	$this->SimpanMd->del_simpan($id);
+            redirect(site_url('HomeCtr/Simpanan_wajib_detail_view/'.$idm.'/'.$idk));
+		
+	}
 	public function peminjaman_del($id=null)
     {
         if (!isset($id)) show_404();
@@ -447,11 +542,19 @@ class HomeCtr extends CI_Controller {
 
 
 
-	// Untuk Edit
+// Untuk Edit  =======================================================================================
 	public function admin_edd($id)
 	{
 		$data["up_admin"] = $this->AdminMd->getById($id); //ambil data dari Models 
 		$this->load->view('update/upd-admin', $data); // Kirim data ke View
+	
+	}
+
+	public function keuangan_edd($id)
+	{
+		$data["up_keuangan"] = $this->PerusahaanMd->get_keuanganid_ById($id); //ambil data dari Models 
+	
+		$this->load->view('update/upd-keuangan', $data); // Kirim data ke View
 	
 	}
 
@@ -470,7 +573,7 @@ class HomeCtr extends CI_Controller {
 	}
 
 
-	// Untuk Edit  =======================================================================================
+	
 	public function kategori_edd($id)
 	{
 		$data["up_kategori"] = $this->KategoriMd->getById($id); //ambil data dari Models 
@@ -517,13 +620,19 @@ class HomeCtr extends CI_Controller {
 		redirect(site_url('HomeCtr/kategori_view'));
 	}
 
+	
+	public function keuangan_update(){   
+       
+		$this->PerusahaanMd->update_keuangan();
+		$this->session->set_flashdata('success', 'Berhasil diupdate');
 
-	public function barang_update(){
-		$this->BarangMd->update_barang();
-		$this->session->set_flashdata('success','Berhasil Diupdate');
-		redirect('HomeCtr/barang_view');
-
+		redirect(site_url('HomeCtr/keuangan_view'));
 	}
+
+
+	
+
+	
 
 
 

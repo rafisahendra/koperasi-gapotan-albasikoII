@@ -6,7 +6,7 @@
         <!-- START DEFAULT DATATABLE -->
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Default</h3>
+                <h3 class="panel-title">Jenis Layanan</h3>
                 <ul class="panel-controls">
                     <li><a href="#" class="panel-collapse"><span class="fa fa-angle-down"></span></a></li>
                     <li><a href="#" class="panel-refresh"><span class="fa fa-refresh"></span></a></li>

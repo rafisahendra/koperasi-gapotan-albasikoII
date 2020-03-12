@@ -33,14 +33,16 @@
                     <form action="<?php echo base_url('Auth') ?>" class="form-horizontal" method="post">
                     <div class="form-group">
                         <div class="col-md-12">
-                            <input type="text" class="form-control" name="email" placeholder="Masukan Email"/>
+                            <label>Masukan Email</label>
+                            <input type="text" class="form-control" name="email" />
                         </div>
                         <?php echo form_error('email', '<small class="text-danger pl-3">', '</small>'); ?>
                     </div>
                     
                     <div class="form-group">
                         <div class="col-md-12">
-                            <input type="password" class="form-control" name="pass" placeholder="Masukan Password"/>
+                            <label>Masukan Password</label>
+                            <input type="password" class="form-control" name="pass" />
                         </div>
                         <?php echo form_error('pass', '<small class="text-danger pl-3 ">', '</small>'); ?>
                     </div>
@@ -57,7 +59,7 @@
                 </div>
                 <div class="login-footer">
                     <div class="pull-left">
-                        &copy; 2020 Juli Eka Saputra
+                        &copy; 2020 -Gapotan Albasiko II
                     </div>
                     <div class="pull-right">
                         <a href="#">Sistem</a> |

@@ -8,10 +8,10 @@
 		<!-- START DEFAULT DATATABLE -->
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h3 class="panel-title"> Data Angsuran</h3>
+				<h3 class="panel-title"> Data penarikan</h3>
 				<ul class="panel-controls">
 					<li><a href="#" class="panel-collapse"><span class="fa fa-angle-down"></span></a></li>
-					<li><a href="<?php echo site_url('HomeCtr/pinjaman_view') ?>"><span class="fa fa-refresh"></span></a>
+					<li><a href="<?php echo site_url('HomeCtr/withdraw_view') ?>"><span class="fa fa-refresh"></span></a>
 					</li>
 					
 				</ul>
@@ -24,7 +24,7 @@
                             </div>
                             <?php endif; ?>
 			<div class="panel-body">
-				<a href="<?= site_url('HomeCtr/pinjaman_add') ?>" style='margin-bottom:10px' class="btn btn-info">Tambah
+				<a href="<?= site_url('HomeCtr/withdraw_add') ?>" style='margin-bottom:10px' class="btn btn-info">Tambah
 					Data</a>
 
                 
@@ -33,7 +33,7 @@
 						<tr >
 							<th>No</th>
 							<th>Nama Anggota</th>
-							<th>Jumlah Pinjaman</th>
+							<th>Jumlah Penarikan</th>
 							<th width="250" class="text-center">Aksi</th>
 						</tr>
 					</thead>
@@ -42,11 +42,11 @@
 						<tr>
 							<td><?= $no+1 ?></td>	
 							<td> <?php echo $data->nama_lengkap ?></td>
-							<td>Rp. <?php echo $data->Jumlah_penarikan?></td>
+							<td>Rp. <?php echo number_format($data->jp)?></td>
 		
 							<td  class="text-center">
-                            <a href="<?php echo site_url('HomeCtr/angsuran_detail_view/'.$data->id_anggota) ?>"
-									class="btn btn-small text-info"><i class="fa fa-list"></i> Detail</a>
+                            <a href="<?php echo site_url('HomeCtr/witdraw_detail_view/'.$data->id_anggota) ?>"
+									class="btn btn-small text-info"><i class="fa fa-list"></i> History Penarikan</a>
 
 							</td>
 

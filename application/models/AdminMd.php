@@ -99,20 +99,46 @@ class AdminMd extends CI_Model
 
 
 
-    // public function get_barangCount(){
-    //     return $this->db->count_all_results('barang');
-    // }
 
-    // public function get_transaksiCount(){
+
+    public function get_memberCount(){
         
-    //     return $this->db->count_all('transaksi');
-    // }
-
-    public function get_adminCount(){
+        return $this->db->count_all('anggota');
+    }
+    public function get_angsuranCount(){
+        
         $this->db->select('*');
-        $this->db->from('admin');
-        $this->db->where('level', 1);
+        $this->db->from('peminjaman');
+        $this->db->where('status', 0);
         return $this->db->count_all_results('');
     }
+
+    public function get_simpanansiCount(){
+
+        $this->db->select('SUM(debit_simpokok + debit_simwajib ) as simpan');
+        $this->db->from('master_transaksi');
+    
+        return $this->db->get('')->row();
+    }
+
+    public function get_angsuranCount2(){
+
+        $this->db->select('SUM(jumlah_bayar ) as dibayar');
+        $this->db->where('status',1);
+        $this->db->from('angsuran');
+    
+        return $this->db->get('')->row();
+    }
+
+
+    public function get_pinjamanCount(){
+
+        $this->db->select('SUM(kredit_peminjaman + bunga_peminjaman ) as pinjam');
+        $this->db->from('master_transaksi');
+    
+        return $this->db->get('')->row();
+    }
+
+
 
 }

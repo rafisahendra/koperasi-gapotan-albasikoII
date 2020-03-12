@@ -40,7 +40,7 @@
 							<th>No</th>
 							<th>Nama Anggota</th>
 							<th>Jumlah Simpanan</th>
-							<th width="250" class="text-center">Aksi</th>
+							
 						</tr>
 					</thead>
 					<tbody>
@@ -50,17 +50,7 @@
 						
 							<td> <?php echo $data->nama_lengkap ?></td>
 							<td>Rp. <?php echo number_format($data->debit_simwajib + $data->debit_simpokok )?></td>
-							<td  class="text-center">
-                            <a href="<?php echo site_url('HomeCtr/penyimpanan_detail/'.$data->id_anggota) ?>"
-									class="btn btn-small text-info"><i class="fa fa-list"></i> Detail</a>
 						
-
-								<!-- <a onclick="return confirm('Are you sure you want to delete this item?');"
-									href="<?php echo site_url('HomeCtr/penyimpanan_del/'.$data->id_penyimpanan) ?>"
-									class="btn btn-small text-danger"><i class="fa fa-trash-o"></i> Hapus</a> -->
-
-
-							</td>
 
 						</tr>
 						<?php endforeach; ?>

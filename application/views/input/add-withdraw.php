@@ -10,7 +10,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title"> Penarikan <strong>Withdraw</strong></h3>
                     <ul class="panel-controls">
-                    <li><a href="<?php echo site_url('HomeCtr/') ?>" ><span class="fa fa-times"></span></a></li>
+                    <li><a href="<?php echo site_url('HomeCtr/withdraw_view') ?>" ><span class="fa fa-times"></span></a></li>
                     </ul>
                 </div>
                 <div class="panel-body">

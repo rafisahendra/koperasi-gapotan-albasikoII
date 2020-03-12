@@ -4,6 +4,7 @@ class WithdrawMd extends CI_Model
 {
     // untuk Get data ========================================
     public function get_withdraw(){
+        $this->db->select('SUM(jumlah_penarikan) as jp');
         $this->db->select('w.*,  a.nama_lengkap');
         $this->db->from('detail_withdraw w');
         $this->db->join('anggota a', 'w.id_anggota = a.id_anggota');
@@ -78,42 +79,10 @@ class WithdrawMd extends CI_Model
         $this->db->delete('transaksi_detail', array('id_detail' => $id));
     }
 
-    public function transaksi_del($id)
-    {
-        $this->db->delete('transaksi', array('id_transaksi' => $id));
-    }
-
+   
     
 
 
 
 
-
-    // Untuk Laporan data
-    public function get_laporan_perhari(){
-        
-        $this->db->select('*');
-        $this->db->from('transaksi ');
-        $this->db->where('tgl_transaksi', $this->input->post('hari'));
-        return $this->db->get('')->result();
-
-
-    }
-
-    public function get_laporan_perbulan(){
-
-        $bulan = $this->input->post('bulan'); 
-        $this->db->select("*,sum(qty) as pj FROM transaksi WHERE tgl_transaksi LIKE '$bulan%' group BY id_transaksi");     
-
-        return  $this->db->get('')->result();
-    }
-
-    public function get_laporan_pertahun(){
-        $tahun = $this->input->post('tahun'); 
-        $this->db->select("*,sum(qty) as pj, sum(total) as pt , MONTH(tgl_transaksi) as bln FROM transaksi WHERE  YEAR(tgl_transaksi)='$tahun' Group BY MONTH(tgl_transaksi)");     
-
-        return  $this->db->get('')->result_array();
-
-    }
- 
 }

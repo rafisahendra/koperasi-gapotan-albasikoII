@@ -37,7 +37,7 @@
 
 						<div class="profile-data">
 							<div class="profile-data-name"><?php echo $this->session->userdata('user')  ?></div>
-							<div class="profile-data-title">Selamat Datang /<?php if($this->session->userdata('level')==2){echo "Pemilik";}else {echo "Admin"; }?></div>
+							<div class="profile-data-title">Selamat Datang /<?php if($this->session->userdata('level')==2){echo "Pimpinan";}else {echo "Admin"; }?></div>
 						</div>
 
 					</div>
@@ -49,6 +49,7 @@
 							class="xn-text">Home</span></a>
 				</li>
 				
+				<?php if($this->session->userdata('level') == '1') : ?>
 				<li class="<?php echo $this->uri->segment(2) == 'anggota_add' ? 'active': '' ?>">
 					<!-- segmen diatas untuk class active -->
 					<a href="<?= site_url() ?>/HomeCtr/anggota_add"><span class="fa fa-user"></span> <span
@@ -59,8 +60,12 @@
 				<li class="<?php echo $this->uri->segment(2) == 'anggota_view' ? 'active': '' ?>">
 					<!-- segmen diatas untuk class active -->
 					<a href="<?= site_url() ?>/HomeCtr/anggota_view"><span class="fa fa-users"></span> <span
-							class="xn-text">Data Anggota</span></a>
+							class="xn-text">Data Member</span></a>
 				</li>
+				<!-- <li class="<?php echo $this->uri->segment(2) == 'keuangan_view' ? 'active': '' ?>">
+					<a href="<?= site_url() ?>/HomeCtr/keuangan_view"><span class="fa fa-list"></span> <span
+							class="xn-text">Keuangan Perusahaan</span></a>
+				</li> -->
 
 				<li class="<?php echo $this->uri->segment(2) == 'kategori_view' ? 'active': '' ?>">
 					<!-- segmen diatas untuk class active -->
@@ -68,29 +73,26 @@
 							class="xn-text">Jenis Layanan</span></a>
 				</li>
 
-				<?php if($this->session->userdata('level') == '1') : ?>
+			
 
 				<li class="xn-openable">
-					<a href="#"><span class="fa fa-file-text-o"></span> <span class="xn-text">Taransaksi</span></a>
+					<a href="#"><span class="fa fa-desktop"></span> <span class="xn-text">Entry Taransaksi</span></a>
 					<ul>
 					
 						<li><a href="<?= base_url('HomeCtr/simpanan_add') ?>"> <span class="fa fa-file-text-o"></span> Simpan</a></li>
 						<li><a href="<?= base_url('HomeCtr/pinjaman_add') ?>"> <span class="fa fa-file-text-o"></span> Pinjam</a></li>
 						<li><a href="<?= base_url('HomeCtr/Withdraw_add') ?>"> <span class="fa fa-file-text-o"></span> Withdraw</a></li>
-						<li><a href="<?= base_url('HomeCtr/angsuran_add') ?>"> <span class="fa fa-file-text-o"></span> Angsuran</a></li>
-
-
+					
 
 					</ul>
 				</li>
 
 				<li class="xn-openable">
-					<a href="#"><span class="fa fa-file-text-o"></span> <span class="xn-text">Data</span></a>
+					<a href="#"><span class="fa fa-file-text-o"></span> <span class="xn-text">Tabel Transaksi</span></a>
 					<ul>
 					
 						<li><a href="<?= base_url('HomeCtr/simpanan_view') ?>"> <span class="fa fa-file-text-o"></span>Data Simpanan</a></li>
-						<li><a href="<?= base_url('HomeCtr/pinjaman_view') ?>"> <span class="fa fa-file-text-o"></span>Data Pinjaman</a></li>
-						<li><a href="<?= base_url('HomeCtr/angsuran_view') ?>"> <span class="fa fa-file-text-o"></span>Data Angsuran</a></li>
+						<li><a href="<?= base_url('HomeCtr/angsuran_view') ?>"> <span class="fa fa-file-text-o"></span>Data Pinjaman </a></li>
 						<li><a href="<?= base_url('HomeCtr/withdraw_view') ?>"> <span class="fa fa-file-text-o"></span>Data Withdraw</a></li>
 
 
@@ -98,30 +100,37 @@
 					</ul>
 				</li>
 
-				<?php endif; ?>
-				<?php if($this->session->userdata('level') == '2') : ?>
-				<li class="xn-openable">
+				
+				<!-- <li class="xn-openable">
 					<a href="#"><span class="fa fa-table"></span> <span class="xn-text">Tabel</span></a>
 					<ul>
 						<li class="<?php echo $this->uri->segment(2) == 'admin_view' ? 'active': '' ?>">
-							<!-- segmen diatas untuk class active -->
+						
 							<a href="<?= site_url('HomeCtr/admin_view') ;?>"><span class="fa fa-tasks"></span> Admin</a>
 						</li>
 
 					</ul>
-				</li>	
+				</li>	 -->
+				<?php endif; ?>
+				<?php if($this->session->userdata('level') == '2') : ?>
 				<?php endif; ?>
 				<li class="xn-openable">
 					<a href="tables.html"><span class="fa fa-calendar"></span> <span class="xn-text">Laporan</span></a>
 					<ul>
+					<li class="<?php echo $this->uri->segment(2) == 'laporan_transaksi_view' ? 'active': '' ?>">
+							<!-- segmen diatas untuk class active -->
+							<a href="<?php echo base_url('Laporan/laporan_anggota') ?>" target="_Blank"><span class="fa fa-list"></span> Laporan Member</a></li>
 						<li class="<?php echo $this->uri->segment(2) == 'laporan_barang' ? 'active': '' ?>">
 							<!-- segmen diatas untuk class active -->
-							<a  href="<?php echo base_url('HomeCtr/laporan_barang') ?>" target="_Blank"><span class="fa fa-list"></span> Laporan Simpanan</a></li>
-						<li class="<?php echo $this->uri->segment(2) == 'laporan_transaksi_view' ? 'active': '' ?>">
+							<a  href="<?php echo base_url('Laporan/laporan_simpanan') ?>" target="_Blank"><span class="fa fa-list"></span> Laporan Simpanan</a></li>
+						<li class="<?php echo $this->uri->segment(2) == 'laporan_simpanan' ? 'active': '' ?>">
 							<!-- segmen diatas untuk class active -->
-							<a href="<?php echo base_url('HomeCtr/laporan_transaksi_view') ?>"><span class="fa fa-list"></span> Laporan Pinjaman</a></li>
+							<a href="<?php echo base_url('laporan/laporan_pinjaman') ?>" target="_Blank"><span class="fa fa-list"></span> Laporan Pinjaman</a></li>
+						<li class="<?php echo $this->uri->segment(2) == 'laporan_penarikan' ? 'active': '' ?>">
+							<!-- segmen diatas untuk class active -->
+							<a href="<?php echo base_url('laporan/laporan_penarikan') ?>" target="_Blank"><span class="fa fa-list"></span> Laporan Penarikan</a></li>
 
-					</ul>
+					</ul> 
 				</li>
 
 

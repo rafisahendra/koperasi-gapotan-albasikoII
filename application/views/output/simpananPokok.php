@@ -32,19 +32,11 @@
 						
 							<td> <?php echo $data->nama_lengkap ?></td>
 							<td> <?php echo $data->nama_kategori?></td>
-							<td> <?php echo $data->jumlah_simpanan?></td>
+							<td> <?php echo number_format($data->jspk)?></td>
 						
 							<td class="text-center">
-                            <a href="<?php echo site_url('HomeCtr/anggota_detail/'.$data->id_penyimpanan) ?>"
-									class="btn btn-small text-info"><i class="fa fa-list"></i> Detail</a>
-								<a href="<?php echo site_url('HomeCtr/anggota_edd/'.$data->id_penyimpanan) ?>"
-									class="btn btn-small"><i class="fa fa-edit"></i> Edit</a>
-
-								<a onclick="return confirm('Are you sure you want to delete this item?');"
-									href="<?php echo site_url('HomeCtr/anggota_del/'.$data->id_penyimpanan) ?>"
-									class="btn btn-small text-danger"><i class="fa fa-trash-o"></i> Hapus</a>
-
-
+                            <a href="<?php echo site_url('HomeCtr/simpanan_pokok_detail_view/'.$data->id_anggota.'/'.$data->id_kategori) ?>"
+									class="btn btn-small text-warning"><i class="fa fa-list"></i> History Member Simpanan Pokok</a>
 							</td>
 
 						</tr>

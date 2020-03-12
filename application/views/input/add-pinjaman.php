@@ -76,7 +76,7 @@
                         <div class="col-md-6 col-xs-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" class="form-control" name="besar_angsuran" readonly/>
+                                <input style="color:#000" type="text" class="form-control" name="besar_angsuran" readonly/>
                             </div>
                 
                         </div>

@@ -10,7 +10,7 @@ function tgl_indo($tanggal)
         'April',
         'Mei',
         'Juni',
-        'Julo',
+        'Juli',
         'Agustus',
         'Septmber',
         'Oktober',

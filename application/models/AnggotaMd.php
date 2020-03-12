@@ -11,6 +11,7 @@ class AnggotaMd extends CI_Model
     public $pekerjaan;
     public $nama_lengkap;
     public $agama;
+    public $tgl_registrasi;
     public $jenis_kelamin;
     public $nohp;
     public $alamat;
@@ -78,6 +79,7 @@ class AnggotaMd extends CI_Model
         $this->pekerjaan    = $post["pekerjaan"];
         $this->nama_lengkap = $post["nama"];
         $this->agama        = $post["agama"];
+        $this->tgl_registrasi= date('Y-m-d');
         $this->jenis_kelamin= $post["jenis_kelamin"];
         $this->nohp         = $post["nohp"];
         $this->alamat       = $post["alamat"];
@@ -95,8 +97,8 @@ class AnggotaMd extends CI_Model
         $this->tgl_lahir    = $post["tgl_lahir"];
         $this->pekerjaan    = $post["pekerjaan"];
         $this->nama_lengkap = $post["nama"];
-        $this->jenis_kelamin = $post["agama"];
-        $this->jenis_kelamin = $post["jenis_kelamin"];
+        $this->agama        = $post["agama"];
+        $this->jenis_kelamin= $post["jenis_kelamin"];
         $this->nohp         = $post["nohp"];
         $this->alamat       = $post["alamat"];
         $this->level        = $post["level"];

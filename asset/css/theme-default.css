@@ -373,7 +373,7 @@ body.page-container-boxed .page-container {
   content: "\f147";
 }
 .x-navigation li.active > a {
-  background: #1caf9a;
+  background: #29b2e1;
   color:#fff;
   -webkit-transition: all 200ms ease;
   -moz-transition: all 200ms ease;
@@ -908,7 +908,7 @@ body.page-container-boxed .page-container {
  color: #FFF;
  height: 50px;
  text-align: center;
- background: #1caf9a;
+ background: #29b2e1;
 }
 .x-navigation > li.xn-logo > a:first-child:hover {
   background-color: #1caf9a;
@@ -2232,7 +2232,7 @@ input[type=checkbox] {
 .form-control[disabled]:focus,
 .form-control[readonly]:focus {
   background: #EEE;
-  color: #CCC;
+  color: #000;
   border-color: #D5D5D5;
 }
 .input-group-addon {
@@ -3871,7 +3871,7 @@ background: #1caf9a !important;
   float: left;
   width: 100%;
   min-height: 100%;
-  background: url("../img/bg.png") left top repeat #1b1e24;
+  background: url("../img/bg.png") left top repeat #29b2e1;
 }
 .login-container .login-box {
   width: 400px;
@@ -3904,12 +3904,12 @@ background: #1caf9a !important;
   border: 0px;
   background: rgba(0, 0, 0, 0.2);
   padding: 10px 15px;
-  color: #CCC;
+  color: #fff;
   line-height: 20px;
   height: auto;
 }
 .login-container .login-box .login-body .btn-link {
-  color: #FFF;
+  color: #000;
   border: 0px;
 }
 .login-container .login-box .login-body .login-or {
@@ -3920,7 +3920,7 @@ background: #1caf9a !important;
   margin: 25px auto;
   text-align: center;
   line-height: 25px;
-  color: #FFF;
+  color: #000;
 }
 .login-container .login-box .login-body .login-or:before {
   content: "";

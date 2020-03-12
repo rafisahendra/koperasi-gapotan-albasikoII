@@ -12,9 +12,24 @@ class SimpanMd extends CI_Model
         return $this->db->get('')->result();   
     } 
 
+    public function get_laporan_simpanan(){
+        $this->db->select('p.*,  a.nama_lengkap, a.tempat_lahir,a.tgl_lahir, k.nama_kategori');
+        $this->db->from('penyimpanan p');
+        $this->db->join('anggota a', 'p.id_anggota = a.id_anggota');
+        $this->db->join('kategori k', 'p.id_kategori = k.id_kategori');
+        return  $this->db->get('')->result();
+    }
+    public function get_laporan_penarikan(){
+        $this->db->select('w.*,  a.nama_lengkap, k.nama_kategori');
+        $this->db->from('detail_withdraw w');
+        $this->db->join('anggota a', 'w.id_anggota = a.id_anggota');
+        $this->db->join('kategori k', 'w.id_kategori = k.id_kategori');
+        return  $this->db->get('')->result();
+    }
+
     public function get_simpananWajib(){
 
-        $this->db->select('SUM(jumlah_simpanan)');
+        $this->db->select('SUM(jumlah_simpanan) as jswb');
         $this->db->select('p.*,  a.nama_lengkap , k.nama_kategori');
         $this->db->from('penyimpanan p');
         $this->db->join('anggota a', 'p.id_anggota = a.id_anggota');
@@ -26,7 +41,7 @@ class SimpanMd extends CI_Model
 
     public function get_simpananPokok(){
 
-        $this->db->select_sum('jumlah_simpanan');
+        $this->db->select('SUM(jumlah_simpanan) as jspk');
         $this->db->select('p.*,  a.nama_lengkap , k.nama_kategori');
         $this->db->from('penyimpanan p');
         $this->db->join('anggota a', 'p.id_anggota = a.id_anggota');
@@ -34,6 +49,26 @@ class SimpanMd extends CI_Model
         $this->db->where('k.id_kategori', 5);
         $this->db->group_by("a.id_anggota");
         return $this->db->get('')->result();
+    }
+
+    public function get_detailSimpananWajib($id_anggota, $id_kategori){
+        $this->db->select('p.*,  a.nama_lengkap , k.nama_kategori');
+        $this->db->from('penyimpanan p');
+        $this->db->join('anggota a', 'p.id_anggota = a.id_anggota');
+        $this->db->join('kategori k', 'p.id_kategori = k.id_kategori');
+        $this->db->where('a.id_anggota', $id_anggota);
+        $this->db->where('k.id_kategori', $id_kategori);
+        return  $this->db->get('')->result();
+    }
+
+    public function get_detailSimpananPokok($id_anggota, $id_kategori){
+        $this->db->select('p.*,  a.nama_lengkap , k.nama_kategori');
+        $this->db->from('penyimpanan p');
+        $this->db->join('anggota a', 'p.id_anggota = a.id_anggota');
+        $this->db->join('kategori k', 'p.id_kategori = k.id_kategori');
+        $this->db->where('a.id_anggota', $id_anggota);
+        $this->db->where('k.id_kategori', $id_kategori);
+        return  $this->db->get('')->result();
     }
 
 
@@ -111,47 +146,17 @@ class SimpanMd extends CI_Model
 
     // ======================================= SELESAI =========================================== 
     //  Untuk Delete data ========================================
-    public function del_detail($id){
+    public function del_simpan($id){
 
-        $this->db->delete('transaksi_detail', array('id_detail' => $id));
+        $this->db->delete('penyimpanan', array('id_penyimpanan' => $id));
     }
 
-    public function transaksi_del($id)
-    {
-        $this->db->delete('transaksi', array('id_transaksi' => $id));
-    }
-
-    
+   
 
 
 
 
 
-    // Untuk Laporan data
-    public function get_laporan_perhari(){
-        
-        $this->db->select('*');
-        $this->db->from('transaksi ');
-        $this->db->where('tgl_transaksi', $this->input->post('hari'));
-        return $this->db->get('')->result();
 
-
-    }
-
-    public function get_laporan_perbulan(){
-
-        $bulan = $this->input->post('bulan'); 
-        $this->db->select("*,sum(qty) as pj FROM transaksi WHERE tgl_transaksi LIKE '$bulan%' group BY id_transaksi");     
-
-        return  $this->db->get('')->result();
-    }
-
-    public function get_laporan_pertahun(){
-        $tahun = $this->input->post('tahun'); 
-        $this->db->select("*,sum(qty) as pj, sum(total) as pt , MONTH(tgl_transaksi) as bln FROM transaksi WHERE  YEAR(tgl_transaksi)='$tahun' Group BY MONTH(tgl_transaksi)");     
-
-        return  $this->db->get('')->result_array();
-
-    }
  
 }

@@ -24,30 +24,34 @@
                             </div>
                             <?php endif; ?>
 			<div class="panel-body">
-				<a href="<?= site_url('HomeCtr/pinjaman_add') ?>" style='margin-bottom:10px' class="btn btn-info">Tambah
-					Data</a>
-
-                
+				
+					<div class="pull-right">
+                  <a href="<?= site_url('HomeCtr/angsuran_detail_view') ?>" style='margin-bottom:10px' class="btn btn-warning">Bayar Angsuran Pinjaman</a>
+                </div>
 				<table class="table datatable">
 					<thead>
 						<tr >
 							<th>No</th>
 							<th>Nama Anggota</th>
 							<th>Jumlah Pinjaman</th>
-							<th width="250" class="text-center">Aksi</th>
+							<th>Jumlah Pinjaman + Bunga</th>
+							<th width="250" class="text-center">Status</th>
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach($pinjam as $no => $data): ?>
+						<?php foreach($pinjam as $no => $data):
+								$bunga = ($data->bunga_pinjaman /100 ) * $data->jumlah_pinjaman;
+								$bunga_pinjaman = $bunga + $data->jumlah_pinjaman;
+							 ?>
+						
 						<tr>
 							<td><?= $no+1 ?></td>	
 							<td> <?php echo $data->nama_lengkap ?></td>
-							<td>Rp. <?php echo $data->kredit_peminjaman?></td>
+							<td>Rp. <?php echo $data->jumlah_pinjaman?></td>
+							<td>Rp. <?php echo $bunga_pinjaman;?></td>
 		
 							<td  class="text-center">
-                            <a href="<?php echo site_url('HomeCtr/peminjaman_detail/'.$data->id_anggota) ?>"
-									class="btn btn-small text-info"><i class="fa fa-list"></i> Detail</a>
-
+								<p style="color:#29b2e1">Angsuran</p>
 							</td>
 
 						</tr>
